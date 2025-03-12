@@ -1,139 +1,134 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useState, useEffect } from 'react';
 import { 
-  onAuthStateChanged, 
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut, 
   sendPasswordResetEmail,
-  updateProfile,
-  updateEmail,
-  updatePassword
-} from 'firebase/auth'
-import { doc, setDoc, getDoc } from 'firebase/firestore'
-import { auth, db } from '../services/firebase'
+  onAuthStateChanged,
+  updateProfile
+} from 'firebase/auth';
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db } from '../services/firebase';
 
-const AuthContext = createContext()
+// Create auth context
+export const AuthContext = createContext();
 
-export function useAuth() {
-  return useContext(AuthContext)
-}
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
-  const [userData, setUserData] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  async function signup(email, password, displayName) {
-    try {
-      // Creare un nuovo utente con email e password
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-      const user = userCredential.user
-      
-      // Aggiornare il profilo con il displayName
-      await updateProfile(user, { displayName })
-      
-      // Creare un documento utente in Firestore
-      await setDoc(doc(db, 'users', user.uid), {
-        email,
-        displayName,
-        createdAt: new Date().toISOString(),
-        photoURL: null,
-        projects: []
-      })
-      
-      return { success: true }
-    } catch (error) {
-      return { success: false, error: error.message }
-    }
-  }
-
-  async function login(email, password) {
-    try {
-      await signInWithEmailAndPassword(auth, email, password)
-      return { success: true }
-    } catch (error) {
-      return { success: false, error: error.message }
-    }
-  }
-
-  function logout() {
-    return signOut(auth)
-  }
-
-  function resetPassword(email) {
-    return sendPasswordResetEmail(auth, email)
-  }
-
-  function updateUserEmail(email) {
-    return updateEmail(auth.currentUser, email)
-  }
-
-  function updateUserPassword(password) {
-    return updatePassword(auth.currentUser, password)
-  }
-
-  async function updateUserProfile(data) {
-    try {
-      const updates = {}
-      if (data.displayName) {
-        updates.displayName = data.displayName
-        await updateProfile(auth.currentUser, { displayName: data.displayName })
-      }
-      
-      // Aggiorna i dati in Firestore
-      const userRef = doc(db, 'users', auth.currentUser.uid)
-      await setDoc(userRef, { ...data }, { merge: true })
-      
-      // Aggiorna lo stato locale
-      const docSnap = await getDoc(userRef)
-      if (docSnap.exists()) {
-        setUserData(docSnap.data())
-      }
-      
-      return { success: true }
-    } catch (error) {
-      return { success: false, error: error.message }
-    }
-  }
-
+  // Watch auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user)
+      setUser(user);
       
       if (user) {
-        // Carica i dati dell'utente da Firestore
-        const userRef = doc(db, 'users', user.uid)
-        const docSnap = await getDoc(userRef)
-        
-        if (docSnap.exists()) {
-          setUserData(docSnap.data())
+        try {
+          // Get user data from Firestore
+          const docRef = doc(db, 'users', user.uid);
+          const docSnap = await getDoc(docRef);
+          
+          if (docSnap.exists()) {
+            setUserData(docSnap.data());
+          }
+        } catch (err) {
+          console.error('Error fetching user data:', err);
         }
       } else {
-        setUserData(null)
+        setUserData(null);
       }
       
-      setLoading(false)
-    })
-    
-    return unsubscribe
-  }, [])
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Register new user
+  const register = async (email, password, displayName) => {
+    try {
+      setError(null);
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      
+      // Update profile with display name
+      await updateProfile(user, { displayName });
+      
+      // Create user document in Firestore
+      await setDoc(doc(db, 'users', user.uid), {
+        uid: user.uid,
+        email,
+        displayName,
+        createdAt: serverTimestamp(),
+        lastLogin: serverTimestamp(),
+        projects: []
+      });
+      
+      return { success: true };
+    } catch (err) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    }
+  };
+
+  // Login
+  const login = async (email, password) => {
+    try {
+      setError(null);
+      await signInWithEmailAndPassword(auth, email, password);
+      
+      // Update last login time
+      if (user) {
+        await setDoc(doc(db, 'users', user.uid), {
+          lastLogin: serverTimestamp()
+        }, { merge: true });
+      }
+      
+      return { success: true };
+    } catch (err) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    }
+  };
+
+  // Logout
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      return { success: true };
+    } catch (err) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    }
+  };
+
+  // Password reset
+  const resetPassword = async (email) => {
+    try {
+      setError(null);
+      await sendPasswordResetEmail(auth, email);
+      return { success: true };
+    } catch (err) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    }
+  };
 
   const value = {
     user,
     userData,
     loading,
-    signup,
+    error,
+    register,
     login,
     logout,
-    resetPassword,
-    updateUserEmail,
-    updateUserPassword,
-    updateUserProfile
-  }
+    resetPassword
+  };
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
