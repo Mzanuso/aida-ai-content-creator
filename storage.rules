@@ -1,0 +1,50 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Funzione per verificare l'autenticazione
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Verifica se l'utente è proprietario del contenuto
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Regole per le immagini degli stili
+    match /styles/{styleId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Solo tramite funzioni cloud
+    }
+
+    // Regole per i progetti degli utenti
+    match /users/{userId}/projects/{projectId}/{allPaths=**} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Regole per le immagini generate da Midjourney
+    match /generated/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if false; // Solo tramite funzioni cloud
+    }
+
+    // Regole per i video generati
+    match /videos/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if false; // Solo tramite funzioni cloud
+    }
+
+    // Regole per gli asset pubblici dell'app
+    match /assets/{allPaths=**} {
+      allow read: if true;
+      allow write: if false; // Solo tramite funzioni cloud o console
+    }
+
+    // Regole per gli avatar e immagini profilo degli utenti
+    match /profiles/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+  }
+}
