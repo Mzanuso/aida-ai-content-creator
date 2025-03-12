@@ -1,0 +1,114 @@
+@import '@fontsource/roboto/300.css';
+@import '@fontsource/roboto/400.css';
+@import '@fontsource/roboto/500.css';
+@import '@fontsource/roboto/700.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Roboto', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-background text-neutral-darkest m-0 p-0;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+  
+  h1 {
+    @apply text-4xl font-bold mb-6;
+  }
+  
+  h2 {
+    @apply text-3xl font-bold mb-4;
+  }
+  
+  h3 {
+    @apply text-2xl font-semibold mb-3;
+  }
+  
+  h4 {
+    @apply text-xl font-semibold mb-2;
+  }
+  
+  h5 {
+    @apply text-lg font-medium mb-1;
+  }
+  
+  h6 {
+    @apply text-base font-medium mb-1;
+  }
+  
+  a {
+    @apply text-primary-dark hover:text-primary transition-colors;
+  }
+  
+  input, textarea, select {
+    @apply p-2 border border-neutral rounded-md outline-none focus:border-primary focus:ring-2 focus:ring-primary-light focus:ring-opacity-50;
+  }
+  
+  button {
+    @apply inline-flex items-center justify-center;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-primary {
+    @apply btn bg-primary text-white hover:bg-primary-dark;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-secondary text-white hover:bg-secondary-dark;
+  }
+  
+  .btn-outline {
+    @apply btn border border-primary text-primary hover:bg-primary-light hover:bg-opacity-10;
+  }
+  
+  .btn-ghost {
+    @apply btn text-neutral-darker hover:bg-neutral-light hover:text-neutral-darkest;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-soft p-6;
+  }
+  
+  .container-narrow {
+    @apply max-w-3xl mx-auto px-4;
+  }
+  
+  .container-wide {
+    @apply max-w-7xl mx-auto px-4;
+  }
+}
+
+/* Animazioni */
+.fade-in {
+  @apply animate-fade-in;
+}
+
+.slide-up {
+  @apply animate-slide-up;
+}
+
+.slide-down {
+  @apply animate-slide-down;
+}
+
+.slide-left {
+  @apply animate-slide-left;
+}
+
+.slide-right {
+  @apply animate-slide-right;
+}
