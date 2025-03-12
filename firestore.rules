@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Autenticazione
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Verifica se l'utente è proprietario del documento
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Regole per gli utenti
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update, delete: if isOwner(userId);
+      
+      // Progetti dell'utente
+      match /projects/{projectId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+    
+    // Regole per i progetti
+    match /projects/{projectId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.owner == request.auth.uid || 
+        resource.data.collaborators[request.auth.uid] != null);
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated() && resource.data.owner == request.auth.uid;
+    }
+    
+    // Regole per gli stili
+    match /styles/{styleId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Solo gli admin possono modificare gli stili
+    }
+    
+    // Regole per i contenuti generati
+    match /generatedContent/{contentId} {
+      allow read: if isAuthenticated() && resource.data.owner == request.auth.uid;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated() && resource.data.owner == request.auth.uid;
+    }
+  }
+}
