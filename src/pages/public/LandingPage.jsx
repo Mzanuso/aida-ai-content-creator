@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -7,11 +7,22 @@ import Button from '../../components/ui/Button';
 const LandingPage = () => {
   const { user } = useAuth();
   const { darkMode, toggleDarkMode } = useTheme();
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const features = [
+  // Handle scroll effect for the header
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Updated features focusing on the creative journey rather than technology
+  const creativeJourneySteps = [
     {
-      title: 'Selezione dello stile',
-      description: 'Scegli lo stile visivo del tuo video attraverso palette di colori, parole chiave o gallerie di stili.',
+      title: 'Scegli il tuo stile',
+      description: 'Trova l\'estetica visiva che parla del tuo mondo interiore e riflette la tua visione unica.',
       icon: (
         <svg className="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
@@ -19,8 +30,8 @@ const LandingPage = () => {
       ),
     },
     {
-      title: 'Storytelling assistito',
-      description: 'Il nostro agente AI ti aiuta a sviluppare sceneggiature professionali a partire da semplici idee.',
+      title: 'Racconta la tua storia',
+      description: 'Dai voce alla tua creatività e alle tue emozioni attraverso una narrazione che cattura l\'essenza di ciò che vuoi condividere.',
       icon: (
         <svg className="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 0L11.828 15H9v-2.828l8.586-8.586z" />
@@ -28,8 +39,8 @@ const LandingPage = () => {
       ),
     },
     {
-      title: 'Creazione intelligente di storyboard',
-      description: 'Genera automaticamente immagini basate sulla tua sceneggiatura utilizzando algoritmi di intelligenza artificiale.',
+      title: 'Visualizza le scene',
+      description: 'Trasforma le parole in immagini evocative che danno vita alla tua visione e rendono tangibile la tua storia.',
       icon: (
         <svg className="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -37,8 +48,8 @@ const LandingPage = () => {
       ),
     },
     {
-      title: 'Produzione video automatizzata',
-      description: 'Trasforma le immagini in video fluidi con movimenti di camera, transizioni ed effetti professionali.',
+      title: 'Crea il tuo video',
+      description: 'Vedi la tua storia prendere vita attraverso un video che riflette autenticamente la tua espressione personale.',
       icon: (
         <svg className="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -50,13 +61,18 @@ const LandingPage = () => {
   return (
     <div>
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white shadow-sm dark:bg-gray-900 dark:shadow-gray-800/20">
+      <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white bg-opacity-90 dark:bg-gray-900 dark:bg-opacity-90 shadow-md' : 'bg-transparent'}`}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <span className="text-2xl font-bold text-blue-600 dark:text-blue-500">AIDA</span>
+                <span className="text-2xl font-bold text-gray-900 dark:text-white">AIDA</span>
               </div>
+              <nav className="ml-10 hidden space-x-8 md:flex">
+                <a href="#features" className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Funzionalità</a>
+                <a href="#examples" className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Esempi</a>
+                <a href="#cta" className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Inizia ora</a>
+              </nav>
             </div>
             
             <div className="flex items-center space-x-4">
@@ -155,32 +171,32 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Section - Updated to focus on creative journey */}
       <section id="features" className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-              Tutto ciò di cui hai bisogno per creare video professionali
+              Il tuo viaggio creativo
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-xl text-gray-600 dark:text-gray-300">
-              Un processo in quattro fasi che semplifica la creazione di contenuti video.
+              Ogni fase è un'opportunità per esprimere la tua visione personale.
             </p>
           </div>
 
           <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {features.map((feature, index) => (
+            {creativeJourneySteps.map((step, index) => (
               <div 
-                key={feature.title} 
+                key={step.title} 
                 className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
               >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
-                  {feature.icon}
+                  {step.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  {`${index + 1}. ${feature.title}`}
+                  {`${index + 1}. ${step.title}`}
                 </h3>
                 <p className="mt-2 text-gray-600 dark:text-gray-300">
-                  {feature.description}
+                  {step.description}
                 </p>
               </div>
             ))}
@@ -188,13 +204,13 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-blue-600 py-16 dark:bg-blue-900">
+      {/* CTA Section - Updated with more personal focus */}
+      <section className="bg-gradient-to-r from-blue-600 to-purple-700 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="lg:flex lg:items-center lg:justify-between">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              <span className="block">Pronto a creare il tuo primo video?</span>
-              <span className="block text-blue-200">Inizia oggi stesso con AIDA.</span>
+              <span className="block">Inizia a raccontare la tua storia</span>
+              <span className="block text-blue-200">La tua voce è importante.</span>
             </h2>
             <div className="mt-8 flex lg:mt-0 lg:flex-shrink-0">
               {user ? (
