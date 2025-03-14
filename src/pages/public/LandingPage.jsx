@@ -95,17 +95,20 @@ const LandingPage = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-white to-gray-100 py-16 dark:from-gray-900 dark:to-gray-800">
+      {/* Hero Section - Updated with new human-centered messaging */}
+      <section className="bg-gradient-to-b from-gray-900 to-gray-800 py-20 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-8">
             <div className="flex flex-col justify-center">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl">
-                <span className="block">Trasforma le tue idee in</span>
-                <span className="block text-blue-600 dark:text-blue-500">video straordinari</span>
+              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
+                <span className="block">La tua storia è unica.</span>
+                <span className="block text-blue-400">Raccontala come merita.</span>
               </h1>
-              <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
-                AIDA sfrutta l'intelligenza artificiale per permetterti di creare video professionali in modo semplice e veloce, senza bisogno di competenze tecniche.
+              <p className="mt-4 text-xl text-gray-300">
+                Sii te stesso. Noi ti aiutiamo a brillare.
+              </p>
+              <p className="mt-4 text-lg text-gray-400">
+                AIDA ti guida passo dopo passo nella creazione di video che esprimono la tua autenticità, con un assistente AI sempre pronto ad aiutarti.
               </p>
               <div className="mt-8 flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                 {user ? (
@@ -117,13 +120,13 @@ const LandingPage = () => {
                 ) : (
                   <Link to="/register">
                     <Button variant="primary" size="lg">
-                      Inizia gratuitamente
+                      Inizia a creare
                     </Button>
                   </Link>
                 )}
                 <a
                   href="#features"
-                  className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-5 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="inline-flex items-center justify-center rounded-md border border-gray-600 bg-gray-800 px-5 py-3 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                 >
                   Scopri di più
                 </a>
@@ -131,7 +134,7 @@ const LandingPage = () => {
             </div>
             <div className="flex items-center justify-center">
               <div className="relative h-64 w-full overflow-hidden rounded-lg shadow-lg sm:h-72 md:h-80 lg:h-96">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 opacity-90"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-700 opacity-90"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <svg className="h-24 w-24 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
