@@ -149,7 +149,7 @@ const LandingPage = () => {
                 Sii te stesso. Noi ti aiutiamo a brillare.
               </p>
               <p className="mt-4 text-lg text-gray-400">
-                AIDA ti guida passo dopo passo nella creazione di video che esprimono la tua autenticità, con un assistente AI sempre pronto ad aiutarti.
+                AIDA ti guida passo dopo passo nella creazione di video che esprimono la tua autenticità, con un assistente sempre pronto ad aiutarti.
               </p>
               <div className="mt-8 flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
                 {user ? (
@@ -177,10 +177,13 @@ const LandingPage = () => {
               <div className="relative h-64 w-full overflow-hidden rounded-lg shadow-lg sm:h-72 md:h-80 lg:h-96">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-700 opacity-90"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <svg className="h-24 w-24 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-                    <path fill="none" stroke="white" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 8l6 4-6 4V8z" />
-                  </svg>
+                  <div className="flex flex-col items-center space-y-4">
+                    <svg className="h-24 w-24 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+                      <path fill="none" stroke="white" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 8l6 4-6 4V8z" />
+                    </svg>
+                    <span className="text-lg font-medium text-white">La tua espressione, la nostra passione</span>
+                  </div>
                 </div>
                 <div className="absolute bottom-4 left-4 right-4 flex justify-between rounded-md bg-black/30 p-2 backdrop-blur-sm">
                   <div className="h-2 w-2/3 rounded-full bg-white"></div>
