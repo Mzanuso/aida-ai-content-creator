@@ -83,6 +83,34 @@ const LandingPage = () => {
     }
   ];
 
+  // Nuovi stili artistici per la galleria
+  const styleGallery = [
+    {
+      name: "Contemplativo",
+      description: "Toni morbidi e linee fluide per esprimere momenti di riflessione e tranquillità",
+      image: "https://via.placeholder.com/600x400/1a1a2e/ffffff?text=Contemplativo",
+      colors: ["#C7D7DE", "#4D5F66", "#8D9BA1"]
+    },
+    {
+      name: "Energico",
+      description: "Colori vivaci e forme dinamiche che trasmettono vitalità e movimento",
+      image: "https://via.placeholder.com/600x400/2c3e50/ffffff?text=Energico",
+      colors: ["#E74C3C", "#F4D03F", "#2ECC71"]
+    },
+    {
+      name: "Nostalgico",
+      description: "Atmosfere calde e texture vintage per evocare ricordi e sentimenti del passato",
+      image: "https://via.placeholder.com/600x400/34495e/ffffff?text=Nostalgico",
+      colors: ["#D4A76A", "#B86B3D", "#F2E3CC"]
+    },
+    {
+      name: "Onirico",
+      description: "Sfumature sognanti e composizioni surreali per esplorare mondi immaginari",
+      image: "https://via.placeholder.com/600x400/4a235a/ffffff?text=Onirico",
+      colors: ["#5B3256", "#C39BD3", "#7D3C98"]
+    }
+  ];
+
   return (
     <div>
       {/* Header */}
@@ -95,7 +123,8 @@ const LandingPage = () => {
               </div>
               <nav className="ml-10 hidden space-x-8 md:flex">
                 <a href="#features" className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Funzionalità</a>
-                <a href="#examples" className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Esempi</a>
+                <a href="#styles" className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Stili</a>
+                <a href="#stories" className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Esempi</a>
                 <a href="#cta" className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">Inizia ora</a>
               </nav>
             </div>
@@ -226,6 +255,51 @@ const LandingPage = () => {
                 <p className="mt-2 text-gray-600 dark:text-gray-300">
                   {step.description}
                 </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Style Gallery Section - NEW */}
+      <section id="styles" className="py-16 bg-gray-50 dark:bg-gray-800">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+              Trova il tuo stile unico
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-xl text-gray-600 dark:text-gray-300">
+              Lasciati ispirare da mondi visivi che risuonano con la tua sensibilità.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {styleGallery.map((style, index) => (
+              <div 
+                key={style.name}
+                className="group relative overflow-hidden rounded-lg"
+              >
+                <div className="aspect-w-3 aspect-h-2">
+                  <img
+                    src={style.image}
+                    alt={style.name}
+                    className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6 text-white opacity-90 transition-opacity duration-300 group-hover:opacity-100">
+                  <h3 className="text-xl font-semibold">{style.name}</h3>
+                  <p className="mt-2 text-sm text-gray-200">{style.description}</p>
+                  <div className="mt-3 flex space-x-2">
+                    {style.colors.map((color, colorIndex) => (
+                      <div 
+                        key={colorIndex} 
+                        className="h-5 w-5 rounded-full" 
+                        style={{ backgroundColor: color }}
+                        title={color}
+                      ></div>
+                    ))}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
